@@ -54,3 +54,12 @@ const buttonValue = await dialogs.show({
 
 dialogs.close();
 ```
+
+## Development hint
+To publish a new version, execute:
+```shell
+npm version major|minor|patch
+git push
+git push --tags
+```
+`npm version` changes the version number in `package.json`, makes a commit and creates a git tag automatically.
