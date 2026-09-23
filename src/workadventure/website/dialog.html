@@ -1,0 +1,203 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Workadventure Dialog</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            /* Match the WorkAdventure dark theme so the iframe keeps its transparency
+            (a color-scheme mismatch with the embedder forces an opaque background). */
+            color-scheme: dark;
+            font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+
+        body {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .dialog {
+            width: 100%;
+            height: 100%;
+            padding: 1rem;
+            pointer-events: auto;
+        }
+
+        .dialog__box {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            border: 2px solid #ffffff;
+            border-radius: 0.75rem;
+            background: linear-gradient(
+                    180deg,
+                    rgba(30, 30, 45, 0.97),
+                    rgba(15, 15, 25, 0.97)
+                );
+            color: white;
+            box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.45);
+        }
+
+        .dialog__wrapper {
+            display: flex;
+            align-items: stretch;
+            gap: 0.75em;
+            overflow-y: auto;
+        }
+
+        .dialog__content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .dialog__title {
+            margin-bottom: 0.5em;
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .dialog__message {
+            font-size: 1rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .dialog__avatar {
+            flex: 0 0 auto;
+            width: auto;
+            max-width: 7rem;
+            max-height: 7rem;
+
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            object-fit: cover;
+
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .dialog__buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .dialog__buttons button {
+            min-width: 6rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 0.4rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .dialog__buttons button:hover,
+        .dialog__buttons button:focus-visible {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 600px) {
+            .dialog__wrapper {
+                flex-wrap: wrap;
+                align-items: center;
+            }
+
+            .dialog__avatar {
+                order: 0;
+                width: 3.5rem;
+                height: 3.5rem;
+            }
+
+            .dialog__content {
+                display: contents;
+            }
+
+            .dialog__title {
+                order: 1;
+                margin-bottom: 0;
+                font-size: 1.1rem;
+            }
+
+            .dialog__message {
+                order: 2;
+                flex-basis: 100%;
+            }
+
+            .dialog__buttons {
+                flex-direction: column;
+            }
+
+            .dialog__buttons button {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <script>
+        // Load iframe_api.js from the WorkAdventure server embedding this page,
+        // so the page works on play.workadventu.re, play.staging.workadventu.re
+        // and self-hosted instances alike.
+        let playOrigin = "https://play.workadventu.re";
+        try {
+            if (document.referrer) {
+                playOrigin = new URL(document.referrer).origin;
+            }
+        } catch (e) {
+            console.error("Could not derive the WorkAdventure origin from the referrer", e);
+        }
+
+        const script = document.createElement("script");
+        script.src = `${playOrigin}/iframe_api.js`;
+
+        document.addEventListener("readystatechange", (event) => {
+            if (document.readyState === "interactive") {
+                document.body.prepend(script);
+            }
+        });
+    </script>
+</head>
+
+<body>
+<div class="dialog">
+    <div class="dialog__box">
+        <div class="dialog__wrapper">
+            <img id="avatar" class="dialog__avatar" alt="Avatar" src="" />
+            <div class="dialog__content">
+                <div id="title" class="dialog__title">Oscar</div>
+                <div id="message" class="dialog__message"></div>
+            </div>
+        </div>
+
+        <div id="buttons" class="dialog__buttons"></div>
+    </div>
+</div>
+
+<!--IFRAME_SCRIPT-->
+</body>
+</html>
