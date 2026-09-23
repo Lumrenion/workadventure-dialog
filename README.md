@@ -8,13 +8,16 @@ For now, it only supports a single message with a number of buttons. Optionally 
 and an image (e.g. the avatar of an npc).
 
 ## Usage
-Install the package (TODO)
+Install the package
+```shell
+npm install workdaventure-dialog
+```
 
 Add the Vite plugin to your map project's Vite config(s) — for the map-starter-kit,
 both `web.vite.config.ts` and `buildmap.vite.config.ts`:
 
 ```ts
-import { workAdventureDialog } from "@lumrenion/workadventure-dialog/vite";
+import { workAdventureDialog } from "workadventure-dialog/vite";
 
 export default defineConfig({
     // ...
