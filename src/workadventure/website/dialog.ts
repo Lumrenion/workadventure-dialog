@@ -4,6 +4,10 @@ import {
     DialogTransportRequest,
 } from "../WorkAdventureDialogTransport";
 import { isDialogTransportRequest } from "../WorkAdventureDialogTransport";
+import {request} from "node:http";
+
+const dialogElement =
+    document.getElementById("dialog_box")
 
 const avatarElement =
     document.getElementById("avatar");
@@ -26,8 +30,83 @@ if (
     );
 }
 
-function showDialog(request: DialogTransportRequest): void {
-    if (avatarElement instanceof HTMLImageElement ) {
+/**
+ * Characters per second.
+ */
+let TYPING_DELAY = 35;
+
+function getTypingDelay(character: string): number {
+    switch (character) {
+        case ".":
+        case "!":
+        case "?":
+            return 300;
+
+        case ",":
+        case ";":
+        case ":":
+            return 150;
+
+        default:
+            return TYPING_DELAY;
+    }
+}
+
+let typingTimer: number | undefined;
+let cancelTyping: (() => void) | undefined;
+
+function typeMessage(
+    element: HTMLElement,
+    message: string,
+): Promise<void> {
+    cancelTyping?.();
+
+    return new Promise<void>((resolve) => {
+        let index = 0;
+        let cancelled = false;
+
+        const finish = () => {
+            element.textContent = message;
+            typingTimer = undefined;
+            cancelTyping = undefined;
+            resolve();
+        }
+
+        cancelTyping = () => {
+            cancelled = true;
+
+            if (typingTimer !== undefined) {
+                clearTimeout(typingTimer);
+                typingTimer = undefined;
+            }
+
+            finish();
+        }
+
+        const typeNextCharacter = () => {
+            if (cancelled) {
+                return;
+            }
+
+            if (index >= message.length) {
+                finish();
+                return;
+            }
+
+            element.textContent = message.substring(0, ++index);
+
+            typingTimer = window.setTimeout(typeNextCharacter, getTypingDelay(message[index - 1]));
+        };
+
+        typeNextCharacter();
+    });
+}
+
+async function showDialog(request: DialogTransportRequest): Promise<void> {
+    if (request.typingDelay) {
+        TYPING_DELAY = request.typingDelay;
+    }
+    if (avatarElement instanceof HTMLImageElement) {
         if (!request.avatar) {
             avatarElement.hidden = true;
         } else {
@@ -45,7 +124,6 @@ function showDialog(request: DialogTransportRequest): void {
         }
     }
 
-    messageElement!.textContent = request.message;
     buttonsElement!.replaceChildren();
 
     for (let index = 0; index < request.buttons.length; index++) {
@@ -55,6 +133,7 @@ function showDialog(request: DialogTransportRequest): void {
 
         element.type = "button";
         element.textContent = button.label;
+        element.disabled = true;
 
         element.addEventListener(
             "click",
@@ -77,7 +156,22 @@ function showDialog(request: DialogTransportRequest): void {
 
         buttonsElement!.appendChild(element);
     }
+
+    await typeMessage(messageElement!, request.message);
+
+    for (const element of buttonsElement!.children) {
+        if (element instanceof HTMLButtonElement) {
+            element.disabled = false;
+        }
+    }
 }
+
+dialogElement!.addEventListener(
+    "click",
+    () => {
+        cancelTyping?.();
+    },
+);
 
 window.addEventListener("load", () => {
     WA.onInit()
@@ -107,5 +201,4 @@ window.addEventListener("load", () => {
                 error,
             );
         });
-
 });

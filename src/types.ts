@@ -8,6 +8,7 @@ export interface DialogOptions<T> {
     title?: string;
     message: string;
     buttons: DialogButton<T>[];
+    typingDelay?: number;
 }
 
 export interface DialogController {
@@ -18,6 +19,6 @@ export interface DialogController {
 export interface DialogService {
     show<T>(options: DialogOptions<T>): Promise<T>;
     close(): void;
-    alert(message: string): Promise<void>;
-    confirm(message: string): Promise<string>;
+    alert(message: string, title?: string, avatar?: string, typingDelay?: number): Promise<void>;
+    confirm(message: string, title?: string, avatar?: string, typingDelay?: number): Promise<string>;
 }

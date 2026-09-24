@@ -17,7 +17,7 @@ export class DialogService implements IDialogService {
         return this.controller.close();
     }
 
-    public alert(message: string, title?: string, avatar?: string): Promise<void> {
+    public alert(message: string, title?: string, avatar?: string, typingDelay?: number): Promise<void> {
         return this.controller.show({
             message,
             title,
@@ -28,10 +28,11 @@ export class DialogService implements IDialogService {
                     value: undefined,
                 },
             ],
+            typingDelay
         });
     }
 
-    public confirm(message: string, title?: string, avatar?: string): Promise<string> {
+    public confirm(message: string, title?: string, avatar?: string, typingDelay?: number): Promise<string> {
         return this.controller.show({
             message,
             title,
@@ -46,6 +47,7 @@ export class DialogService implements IDialogService {
                     value: "false",
                 },
             ],
+            typingDelay
         });
     }
 }

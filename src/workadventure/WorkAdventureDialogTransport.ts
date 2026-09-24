@@ -9,6 +9,7 @@ export interface DialogTransportRequest {
     readonly buttons: readonly {
         readonly label: string;
     }[];
+    readonly typingDelay?: number;
 }
 
 export function isDialogTransportRequest(value: unknown): value is DialogTransportRequest {
@@ -26,7 +27,8 @@ export function isDialogTransportRequest(value: unknown): value is DialogTranspo
         typeof request.message !== "string" ||
         (request.title !== undefined && typeof request.title !== "string") ||
         (request.avatar !== undefined && typeof request.avatar !== "string") ||
-        !Array.isArray(request.buttons)
+        !Array.isArray(request.buttons) ||
+        (request.typingDelay !== undefined && typeof request.typingDelay !== "number")
     ) {
         return false;
     }

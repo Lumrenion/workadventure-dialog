@@ -121,6 +121,7 @@ export class WorkAdventureDialogController implements DialogController {
                     label,
                 }),
             ),
+            typingDelay: options.typingDelay ?? undefined,
         });
 
         return response;
