@@ -94,7 +94,7 @@ export class WorkAdventureDialogController implements DialogController {
 
         this.website =
             await this.wa.ui.website.open({
-                url: this.options.url ?? "/dialog.html",
+                url: this.options.url ?? "dialog.html",
                 visible: true,
                 allowApi: true,
                 allowPolicy: "",
