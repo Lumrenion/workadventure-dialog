@@ -13,10 +13,13 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./types/src/index.d.ts",
+      "default": "./dist/index.js"
     },
-    "./vite": "./dist/vite.js",
+    "./vite": {
+      "types": "./types/vite-plugin/index.d.ts",
+      "default": "./dist/vite.js"
+    },
     "./dialog.html": "./dist/dialog.html"
   },
   "scripts": {

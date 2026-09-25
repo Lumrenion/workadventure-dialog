@@ -13,7 +13,7 @@ import { basename, extname } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Plugin } from "vite";
 
-export interface NpcDialogBoxOptions {
+export interface WorkAdventureDialogBoxOptions {
     /**
      * Extra static files (e.g. an NPC avatar image) copied as-is next to the
      * map in the build output and served at /<basename> by the dev server.
@@ -33,7 +33,7 @@ const MIME_TYPES: Record<string, string> = {
     ".svg": "image/svg+xml",
 };
 
-export function workAdventureDialog(options: NpcDialogBoxOptions = {}): Plugin {
+export function workAdventureDialog(options: WorkAdventureDialogBoxOptions = {}): Plugin {
     // The built dialog page sits next to this file (dist/) in the published package.
     const dialogPagePath = fileURLToPath(new URL(`./${DIALOG_PAGE_NAME}`, import.meta.url));
     const assets = options.assets ?? [];

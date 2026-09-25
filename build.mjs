@@ -42,7 +42,7 @@ const iframeBundle = await build({
     format: "iife",
     platform: "browser",
     target: "es2018",
-    // minify: true,
+    minify: true,
     write: false,
 });
 const iframeJs = iframeBundle.outputFiles[0].text;
@@ -61,4 +61,4 @@ writeFileSync(
     template.replace(placeholder, () => `<script>\n${iframeJs}</script>`),
 );
 
-console.log("Built dist/api.js, dist/vite.js and dist/npc-dialog.html");
+console.log("Built dist/index.js, dist/vite.js and dist/dialog.html");
